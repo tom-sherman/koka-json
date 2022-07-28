@@ -1,3 +1,5 @@
+module json
+
 import std/text/parse
 import std/num/float64
 import util
@@ -65,7 +67,7 @@ fun json-key-value()
   whitespace0()
   json-colon()
   whitespace0()
-  val value = json-parse()
+  val value = parse-json()
   (key, value)
 
 fun json-object()
@@ -85,14 +87,14 @@ fun json-array()
   json-left-bracket()
   val values = sep-by(json-comma, {
     whitespace0()
-    val value = json-parse()
+    val value = parse-json()
     whitespace0()
     value
   })
   json-right-bracket()
   JSONArray(values)
 
-fun json-parse()
+pub fun parse-json()
   choose([
     json-null,
     json-true,
@@ -103,7 +105,7 @@ fun json-parse()
     json-array
   ])
 
-fun show-json(json: json) : <div|_e> string
+pub fun show-json(json: json) : <div|_e> string
   match json
     JSONFalse -> "false"
     JSONTrue -> "true"
@@ -113,8 +115,4 @@ fun show-json(json: json) : <div|_e> string
     JSONArray(value) -> value.show-list(show-json)
     JSONObject(kvs) -> "{" ++ kvs.map(fn((k, v)) "\"" ++ k ++ "\":" ++ show-json(v)).join(",") ++ "}"
 
-
-fun test(s)
-  match s.slice.parse-eof({ json-parse() }).either
-    Left(e) -> "Left(" ++ e.show ++ ")"
-    Right(v) -> "Right(" ++ v.show-json ++ ")"
+pub val stringify = show-json
