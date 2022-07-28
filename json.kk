@@ -1,5 +1,6 @@
 import std/text/parse
 import std/num/float64
+import util
 
 type json
   JSONFalse
@@ -67,15 +68,13 @@ fun json-key-value()
   val value = json-parse()
   (key, value)
 
-// FIXME: Currently _requires_ trailing commas
 fun json-object()
   json-left-brace()
   whitespace0()
-  val kvs = many({
+  val kvs = sep-by(json-comma, {
     whitespace0()
     val kv = json-key-value()
     whitespace0()
-    json-comma()
     kv
   })
   whitespace0()
@@ -84,15 +83,12 @@ fun json-object()
 
 fun json-array()
   json-left-bracket()
-  whitespace0()
-  val values = many({
+  val values = sep-by(json-comma, {
     whitespace0()
     val value = json-parse()
     whitespace0()
-    json-comma()
     value
   })
-  whitespace0()
   json-right-bracket()
   JSONArray(values)
 
