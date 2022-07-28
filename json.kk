@@ -4,7 +4,7 @@ import std/text/parse
 import std/num/float64
 import util
 
-type json
+pub type json
   JSONFalse
   JSONTrue
   JSONNull
@@ -105,7 +105,7 @@ pub fun parse-json()
     json-array
   ])
 
-pub fun show-json(json: json) : <div|_e> string
+pub fun show-json(json: json) : pure string
   match json
     JSONFalse -> "false"
     JSONTrue -> "true"
