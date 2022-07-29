@@ -21,6 +21,7 @@ fun main()
       ])
     )
   )
+  println("All tests passed")
 
 fun json-parse-equals(s, json)
   s.slice.parse-eof(parse-json).either.maybe.unjust.equals(json)
