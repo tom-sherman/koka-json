@@ -105,14 +105,14 @@ pub fun parse-json()
     json-array
   ])
 
-pub fun show-json(json: json) : pure string
+pub fun show(json: json) : div string
   match json
     JSONFalse -> "false"
     JSONTrue -> "true"
     JSONNull -> "null"
     JSONString(value) -> "\"" ++ value ++ "\""
-    JSONNumber(value) -> value.show-fixed
-    JSONArray(value) -> value.show-list(show-json)
-    JSONObject(kvs) -> "{" ++ kvs.map(fn((k, v)) "\"" ++ k ++ "\":" ++ show-json(v)).join(",") ++ "}"
+    JSONNumber(value) -> value.show
+    JSONArray(value) -> value.show-list(show)
+    JSONObject(kvs) -> "{" ++ kvs.map(fn((k, v)) "\"" ++ k ++ "\":" ++ show(v)).join(",") ++ "}"
 
-pub val stringify = show-json
+pub val stringify : json -> pure string = show
